@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import { CodeSnippet, codeSnippets } from "@/lib/code-snippets";
 import { Badge } from "@/components/ui/badge";
-
+import Link from "next/link";
 interface SnippetSelectorProps {
   selectedSnippet: CodeSnippet;
   onSnippetChange: (snippet: CodeSnippet) => void;
@@ -44,9 +44,9 @@ export function SnippetSelector({
             </span>
           </SelectValue>
         </SelectTrigger>
-        <SelectContent 
-          position="popper" 
-          className="w-[280px] shadow-md" 
+        <SelectContent
+          position="popper"
+          className="w-[280px] shadow-md"
           align="center"
           sideOffset={5}
         >
@@ -56,7 +56,11 @@ export function SnippetSelector({
                 {language}
               </SelectLabel>
               {snippets.map((snippet) => (
-                <SelectItem key={snippet.id} value={snippet.id} className="hover:bg-accent">
+                <SelectItem
+                  key={snippet.id}
+                  value={snippet.id}
+                  className="hover:bg-accent"
+                >
                   <div className="flex items-center justify-between w-full">
                     <span>{snippet.name}</span>
                     <Badge variant="secondary" className="ml-2">
@@ -67,8 +71,16 @@ export function SnippetSelector({
               ))}
             </SelectGroup>
           ))}
+          <Link
+            href="https://github.com/icantcodefyi/cattype?tab=readme-ov-file#adding-new-code-snippets"
+            target="_blank"
+          >
+                <div className="relative flex w-full cursor-default select-none items-center hover:bg-accent hover:text-accent-foreground rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                  <span>Add your own snippets</span>
+                </div>
+          </Link>
         </SelectContent>
       </Select>
     </div>
   );
-} 
+}

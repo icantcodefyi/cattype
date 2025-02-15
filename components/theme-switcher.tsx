@@ -68,6 +68,14 @@ export function ThemeSwitcher() {
               <DropdownMenuSeparator />
             </Fragment>
           ))}
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => window.open("https://github.com/icantcodefyi/cattype?tab=readme-ov-file#customization", "_blank")}
+          >
+            <div className="flex items-center gap-2 py-1">
+              <span className="text-sm">Add your own theme</span>
+            </div>
+          </DropdownMenuItem>
         </ScrollArea>
       </DropdownMenuContent>
     </DropdownMenu>
