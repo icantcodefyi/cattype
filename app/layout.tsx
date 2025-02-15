@@ -6,34 +6,37 @@ import { SessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const geist = Geist({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   title: "CatType",
-  description: "CatType is a typing game that allows you to practice your typing skills.",
-  metadataBase: new URL('https://www.cattype.live'),
+  description:
+    "CatType is a typing game that allows you to practice your typing skills.",
+  metadataBase: new URL("https://www.cattype.live"),
   openGraph: {
     title: "CatType - The Ultimate Typing Practice App",
     description: "Improve your typing speed with fun and interactive exercises",
-    images: [{
-      url: '/api/og',
-      width: 1200,
-      height: 630,
-    }],
+    images: [
+      {
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: "CatType - The Ultimate Typing Practice App",
     description: "Improve your typing speed with fun and interactive exercises",
-    images: ['/api/og'],
+    images: ["/api/og"],
   },
 };
 
@@ -44,9 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geist.className} antialiased`}>
         <SessionProvider>
           <TooltipProvider delayDuration={300}>
             <Toaster />

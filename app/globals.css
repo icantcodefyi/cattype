@@ -140,3 +140,32 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .capturing {
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    filter: none !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    font-family: 'Geist', sans-serif !important;
+  }
+
+  .capturing [data-hide-in-image="true"] {
+    display: none !important;
+  }
+
+  .capturing .recharts-cartesian-grid-horizontal line,
+  .capturing .recharts-cartesian-grid-vertical line {
+    stroke: hsl(var(--border)) !important;
+  }
+
+  /* Card animations */
+  .card {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+  }
+}
