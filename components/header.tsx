@@ -28,8 +28,8 @@ export function Header() {
               className={shouldInvert ? "invert" : ""}
             />
             {!isMobile && (
-              <span className="text-2xl font-medium text-muted-foreground">
-                cattype
+              <span className={`text-2xl font-medium text-black monaco-font ${shouldInvert ? "text-white" : ""}`}>
+                cattype_
               </span>
             )}
           </div>
@@ -50,8 +50,8 @@ export function Header() {
                 <span className="sr-only">Github</span>
               </Button>
             </Link>
-            <SettingsDialog />
             <InfoDialog />
+            <SettingsDialog />
           </div>
         )}
       </div>

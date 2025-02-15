@@ -1,6 +1,17 @@
+@font-face {
+  font-family: 'Monaco';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Monaco'), url('https://fonts.cdnfonts.com/s/14106/Monaco.woff') format('woff');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.monaco-font {
+  font-family: 'Monaco', monospace;
+}
 
 body {
   font-family: Arial, Helvetica, sans-serif;
