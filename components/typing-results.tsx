@@ -20,14 +20,12 @@ import {
 } from "@/components/ui/tooltip";
 import { CodeSnippet } from "@/lib/code-snippets";
 import { Button } from "@/components/ui/button";
-import { RotateCcw, Save, Download, ImageIcon } from "lucide-react";
+import { RotateCcw, Save, Download } from "lucide-react";
 import { toast } from "sonner";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { SettingsDialog } from "./settings-dialog";
 import { useTheme } from "next-themes";
-import html2canvas from "html2canvas";
 import { themeRegistry } from "@/lib/themes/registry";
-import Image from "next/image";
 import { captureResults } from "@/lib/utils/image-capture";
 import { TypingStats } from "@/lib/types/stats";
 
@@ -79,20 +77,6 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   }
   return null;
 };
-
-// Helper function for logo loading with absolute URL
-const loadLogo = () =>
-  new Promise<HTMLImageElement>((resolve, reject) => {
-    const img = new window.Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => resolve(img);
-    img.onerror = (e) => {
-      console.error("Logo load error:", e);
-      reject(new Error("Failed to load logo"));
-    };
-    // Use absolute URL to prevent path issues
-    img.src = window.location.origin + "/logo.svg";
-  });
 
 export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
   const stats = useTypingStore((state) => state.stats) as
@@ -201,7 +185,7 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
 
       const canvas = await captureResults({
         element: resultsRef.current,
-        theme: currentTheme,
+        theme: currentTheme!,
         stats: {
           wpm: lastWPM,
           accuracy,
@@ -506,7 +490,7 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
                 onClick={handleDownload}
                 variant="outline"
                 size="icon"
-                className="shadow-none border-2 hover:border-primary transition-colors"
+                className="shadow-none border-none hover:border-primary transition-colors"
                 disabled={isExporting}
               >
                 <Download
