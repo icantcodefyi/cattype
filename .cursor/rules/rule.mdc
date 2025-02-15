@@ -1,0 +1,75 @@
+---
+description: everything
+globs: 
+---
+React Best Practices:
+
+Use functional components and hooks instead of class components
+Implement proper React memo and useMemo for performance optimization
+Follow the React hooks rules strictly
+Utilize context API for state management across components
+Implement error boundaries to catch and handle errors gracefully
+
+Next.js Standards:
+
+Utilize Next.js App Router for better performance and improved routing
+Implement proper error boundaries using Next.js error handling
+Use proper data fetching patterns with suspense and concurrent rendering
+Leverage Next.js built-in optimizations like code splitting and image optimization
+Implement server-side rendering and static generation where appropriate
+
+TypeScript Practices:
+
+Use TypeScript strict mode for better type safety and catching potential errors
+Follow proper type definitions and use interfaces and types effectively
+Implement comprehensive error handling using TypeScript's type system
+Utilize type inference where possible to reduce unnecessary type annotations
+Use enums and union types for better type safety and code readability
+
+React Hook Form Best Practices:
+
+Use the `useForm` hook for form state management and validation
+Implement custom validation rules using the `validate` option
+Utilize the `watch` function for real-time form value monitoring
+Leverage the `reset` function to reset form state when needed
+Implement proper error handling and display for form validation
+
+Zod Best Practices:
+
+Use Zod for runtime type checking and validation
+Define schemas using Zod's fluent API for better readability
+Utilize Zod's built-in validation methods for common data types
+Implement custom validation rules using Zod's `refine` method
+Use Zod with React Hook Form for seamless form validation integration
+
+Tailwind CSS Best Practices:
+
+Use utility classes for styling components
+Implement responsive design using Tailwind's responsive modifiers
+Utilize Tailwind's custom configuration for project-specific styles
+Implement proper class naming conventions for better maintainability
+Use Tailwind's JIT mode for improved performance and smaller bundle sizes
+
+Radix UI Best Practices:
+
+Use Radix UI components for accessible and customizable UI elements
+Implement proper accessibility attributes and ARIA roles
+Customize Radix UI components using the provided APIs
+Utilize Radix UI's primitives for building custom components
+Follow Radix UI's best practices for component composition and usage
+
+Date-fns Best Practices:
+
+Use date-fns for date manipulation and formatting
+Implement proper date parsing and validation
+Utilize date-fns' modular approach to import only needed functions
+Follow date-fns' naming conventions for better code readability
+Implement proper error handling for date-related operations
+
+Recharts Best Practices:
+
+Use Recharts for creating responsive and interactive charts
+Implement proper data formatting and processing for chart data
+Utilize Recharts' customization options for styling and theming
+Follow Recharts' best practices for performance optimization
+Implement proper accessibility features for charts and graphs
