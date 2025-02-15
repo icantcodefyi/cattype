@@ -61,6 +61,15 @@ export function InfoDialog() {
               >
                 @icantcodefyi
               </Link>
+              {" • "}
+              <Link
+                href="http://git.new/catt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                github
+              </Link>
             </span>
           </div>
         </div>

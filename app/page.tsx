@@ -102,7 +102,7 @@ function MainContent() {
 
   if (isMobile) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background p-4 text-center text-foreground">
+      <div className="flex items-center h-[calc(100vh-56px)] justify-center bg-background p-4 text-center text-foreground">
         <MobileCatView />
       </div>
     );
