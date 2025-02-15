@@ -42,9 +42,9 @@ export function TypingArea({
 
   // Sound effects
   const [playKeyPress] = useSound('/sounds/keypress.mp3', { volume: 0.5 });
-  const [playError] = useSound('/sounds/error.mp3', { volume: 0.3 });
-  const [playEnter] = useSound('/sounds/enter.mp3', { volume: 0.5 });
-  const [playBackspace] = useSound('/sounds/backspace.mp3', { volume: 0.4 });
+  const [playError] = useSound('/sounds/keypress.mp3', { volume: 0.3 });
+  const [playEnter] = useSound('/sounds/keypress.mp3', { volume: 0.5 });
+  const [playBackspace] = useSound('/sounds/keypress.mp3', { volume: 0.4 });
 
   // Cursor blinking effect
   useEffect(() => {

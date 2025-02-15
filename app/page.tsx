@@ -102,7 +102,7 @@ function MainContent() {
 
   if (isMobile) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background p-4 text-center text-foreground">
+      <div className="flex items-center h-[calc(100vh-56px)] justify-center bg-background p-4 text-center text-foreground">
         <MobileCatView />
       </div>
     );
@@ -161,6 +161,7 @@ function MainContent() {
                 size="icon"
                 className="shadow-none border-none"
                 title="Reset the test"
+                aria-label="Reset typing test"
               >
                 <RotateCcw className="w-5 h-5 transition-transform hover:-rotate-90" />
               </Button>

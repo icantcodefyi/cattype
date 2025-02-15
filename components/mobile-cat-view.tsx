@@ -3,13 +3,12 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
+import Image from 'next/image';
 
 export function MobileCatView() {
   const [catUrl, setCatUrl] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
 
   const fetchNewCat = async () => {
-    setIsLoading(true);
     try {
       const response = await fetch('https://api.thecatapi.com/v1/images/search', {
         headers: {
@@ -20,8 +19,6 @@ export function MobileCatView() {
       setCatUrl(data[0].url);
     } catch (error) {
       console.error('Error fetching cat:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -31,21 +28,30 @@ export function MobileCatView() {
 
   return (
     <div className="bg-card p-6">
-      <h1 className="mb-4 text-2xl font-bold">Desktop Experience Recommended</h1>
-      <p className="mb-6">Please open this website on a laptop or desktop computer for the best typing experience.</p>
-      
+      <h1 className="mb-4 text-2xl font-bold">Desktop Experience Needed</h1>      
       <div className="space-y-4">
-        <div className="relative aspect-square w-full max-w-[300px] mx-auto overflow-hidden rounded-lg">
-          {isLoading ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-muted">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
-            </div>
-          ) : (
-            <img
+        <div className="relative aspect-square w-full max-w-[300px] mx-auto overflow-hidden rounded-lg bg-muted">
+          {catUrl && (
+            <Image
               src={catUrl}
               alt="Random cat"
-              className="object-cover w-full h-full"
+              fill
+              sizes="(max-width: 300px) 100vw, 300px"
+              className="object-cover"
+              priority={false}
+              loading="lazy"
+              onLoadingComplete={(img) => {
+                img.classList.remove('opacity-0');
+              }}
+              onError={() => {
+                console.error('Failed to load cat image');
+              }}
             />
+          )}
+          {!catUrl && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
+            </div>
           )}
         </div>
         

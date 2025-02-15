@@ -91,7 +91,7 @@ export function SettingsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       {showTrigger && (
         <DialogTrigger asChild>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" aria-label="Open settings">
             <Settings className="h-5 w-5" />
             <span className="sr-only">Settings</span>
           </Button>
@@ -171,6 +171,7 @@ export function SettingsDialog({
                 onClick={handleSignOut}
                 variant="destructive"
                 className="w-full flex items-center justify-center gap-2"
+                aria-label="Sign out of your account"
               >
                 <LogOut className="h-5 w-5" />
                 Sign Out

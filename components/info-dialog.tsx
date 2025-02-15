@@ -13,7 +13,7 @@ export function InfoDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" aria-label="View information">
           <Info className="h-5 w-5" />
           <span className="sr-only">Information</span>
         </Button>
@@ -60,6 +60,15 @@ export function InfoDialog() {
                 className="text-primary hover:underline"
               >
                 @icantcodefyi
+              </Link>
+              {" • "}
+              <Link
+                href="http://git.new/catt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                github
               </Link>
             </span>
           </div>
