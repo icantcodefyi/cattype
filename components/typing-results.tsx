@@ -28,6 +28,7 @@ import { Button } from '@/components/ui/button';
 import { RotateCcw, Save } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import { SettingsDialog } from './settings-dialog';
 
 interface TypingResultsProps {
   onRestart: () => void;
@@ -80,6 +81,7 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
   const resetStats = useTypingStore((state) => state.resetStats);
   const { session } = useAuthStore();
   const [isSaving, setIsSaving] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   if (!stats.isComplete) return null;
 
@@ -122,7 +124,7 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
 
   const handleSave = async () => {
     if (!session?.user?.id) {
-      toast.error("Please sign in to save your results");
+      setShowSettings(true);
       return;
     }
 
@@ -170,6 +172,11 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-6xl mx-auto p-6 space-y-6"
     >
+      <SettingsDialog 
+        open={showSettings} 
+        onOpenChange={setShowSettings}
+        showTrigger={false}
+      />
       <div className="flex flex-col md:flex-row gap-4 justify-between">
         <div className="flex flex-col gap-2">
           <div className="text-4xl font-mono">

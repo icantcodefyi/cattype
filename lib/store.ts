@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface TypingStats {
   wpm: number[];
@@ -64,55 +65,66 @@ const initialStats: TypingStats = {
   totalErrors: 0
 };
 
-export const useTypingStore = create<TypingStore>((set) => ({
-  stats: initialStats,
-  currentTheme: null,
-  settings: {
-    showErrors: true,
-    soundEffects: false,
-  },
-  setSettings: (newSettings) => 
-    set((state) => ({
+export const useTypingStore = create<TypingStore>()(
+  persist(
+    (set) => ({
+      stats: initialStats,
+      currentTheme: null,
       settings: {
-        ...state.settings,
-        ...newSettings
-      }
-    })),
-  setCurrentTheme: (theme) => set({ currentTheme: theme }),
-  addWPMSample: (wpm, raw, errors) =>
-    set((state) => ({
-      stats: {
-        ...state.stats,
-        wpm: [...state.stats.wpm, wpm],
-        raw: [...state.stats.raw, raw],
-        errors: [...state.stats.errors, errors],
-        totalErrors: errors
-      }
-    })),
-  updateAccuracy: (accuracy) =>
-    set((state) => ({
-      stats: {
-        ...state.stats,
-        accuracy
-      }
-    })),
-  updateCharacters: (chars) =>
-    set((state) => ({
-      stats: {
-        ...state.stats,
-        characters: chars
-      }
-    })),
-  setComplete: (time) =>
-    set((state) => ({
-      stats: {
-        ...state.stats,
-        isComplete: true,
-        time
-      }
-    })),
-  resetStats: () => set({ stats: initialStats })
-}));
+        showErrors: true,
+        soundEffects: false,
+      },
+      setSettings: (newSettings) => 
+        set((state) => ({
+          settings: {
+            ...state.settings,
+            ...newSettings
+          }
+        })),
+      setCurrentTheme: (theme) => set({ currentTheme: theme }),
+      addWPMSample: (wpm, raw, errors) =>
+        set((state) => ({
+          stats: {
+            ...state.stats,
+            wpm: [...state.stats.wpm, wpm],
+            raw: [...state.stats.raw, raw],
+            errors: [...state.stats.errors, errors],
+            totalErrors: errors
+          }
+        })),
+      updateAccuracy: (accuracy) =>
+        set((state) => ({
+          stats: {
+            ...state.stats,
+            accuracy
+          }
+        })),
+      updateCharacters: (chars) =>
+        set((state) => ({
+          stats: {
+            ...state.stats,
+            characters: chars
+          }
+        })),
+      setComplete: (time) =>
+        set((state) => ({
+          stats: {
+            ...state.stats,
+            isComplete: true,
+            time
+          }
+        })),
+      resetStats: () => set({ stats: initialStats })
+    }),
+    {
+      name: 'typing-store',
+      partialize: (state) => ({ 
+        settings: state.settings,
+        currentTheme: state.currentTheme 
+      })
+    }
+  )
+);
 
 export const useAuthStore = create<AuthState>((set) => ({
   session: null,
