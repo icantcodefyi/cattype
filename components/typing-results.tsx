@@ -28,6 +28,8 @@ import { useTheme } from "next-themes";
 import html2canvas from "html2canvas";
 import { themeRegistry } from "@/lib/themes/registry";
 import Image from "next/image";
+import { captureResults } from "@/lib/utils/image-capture";
+import { TypingStats } from "@/lib/types/stats";
 
 interface TypingResultsProps {
   onRestart: () => void;
@@ -93,7 +95,9 @@ const loadLogo = () =>
   });
 
 export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
-  const stats = useTypingStore((state) => state.stats);
+  const stats = useTypingStore((state) => state.stats) as
+    | TypingStats
+    | undefined;
   const resetStats = useTypingStore((state) => state.resetStats);
   const { session } = useAuthStore();
   const [isSaving, setIsSaving] = useState(false);
@@ -102,10 +106,10 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
   const resultsRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
 
-  if (!stats.isComplete) return null;
+  if (!stats?.isComplete) return null;
 
   // Create data points only until completion time
-  const time = stats.time || 0;
+  const time = stats?.time ?? 0;
   const chartData = Array.from({ length: Math.ceil(time) }, (_, index) => {
     // Only include data points up to the actual completion time
     if (index + 1 > time) return null;
@@ -127,12 +131,13 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
     });
   }
 
-  const lastWPM = stats.wpm[stats.wpm.length - 1] || 0;
-  const lastRaw = stats.raw[stats.raw.length - 1] || 0;
-  const timeTaken = stats.time || 0;
+  const lastWPM = stats?.wpm?.[stats.wpm.length - 1] ?? 0;
+  const lastRaw = stats?.raw?.[stats.raw.length - 1] ?? 0;
+  const timeTaken = stats?.time ?? 0;
+  const accuracy = stats?.accuracy ?? 0;
 
   // Find max value for Y axis (only considering wpm and raw)
-  const maxY = Math.max(...stats.wpm, ...stats.raw);
+  const maxY = Math.max(...(stats?.wpm ?? []), ...(stats?.raw ?? []));
 
   const formatCharacterStats = () => {
     return `${stats.characters.correct}/${stats.totalErrors}/${stats.characters.extra}/${stats.characters.missed}`;
@@ -184,189 +189,25 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
     }
   };
 
-  const captureResults = async () => {
-    if (!resultsRef.current) return null;
-    setIsExporting(true);
+  const handleDownload = async () => {
+    if (!resultsRef.current || !stats) {
+      toast.error("No results to download");
+      return;
+    }
 
     try {
+      setIsExporting(true);
       const currentTheme = themeRegistry.getTheme(theme || "classic-dark");
 
-      // Pre-load logo before starting capture
-      let logoImg;
-      try {
-        const response = await fetch("/logo.svg");
-        if (!response.ok) throw new Error("Logo not found");
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        logoImg = await new Promise<HTMLImageElement>((resolve, reject) => {
-          const img = new Image();
-          img.onload = () => resolve(img);
-          img.onerror = reject;
-          img.src = url;
-        });
-      } catch (error) {
-        console.warn("Logo loading skipped:", error);
-      }
-
-      const container = document.createElement("div");
-      const clone = resultsRef.current.cloneNode(true) as HTMLElement;
-
-      // Remove the brand section if it exists
-      const brandSection = clone.querySelector("[data-brand-section]");
-      if (brandSection) {
-        brandSection.remove();
-      }
-
-      // Font loading
-      const fontCSS = `
-        @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap');
-      `;
-      const style = document.createElement("style");
-      style.textContent = fontCSS;
-      document.head.appendChild(style);
-
-      // Wait for fonts to load
-      await document.fonts.ready;
-
-      // Cleanup function with proper font handling
-      const cleanup = (element: HTMLElement) => {
-        element.style.transform = "none";
-        element.style.transition = "none";
-
-        // Handle monospace elements
-        const monoElements = element.querySelectorAll(
-          ".font-mono, .text-primary"
-        );
-        monoElements.forEach((el) => {
-          if (el instanceof HTMLElement) {
-            el.style.fontFamily = "'Geist Mono', monospace";
-            el.style.fontWeight = "700";
-          }
-        });
-
-        // Handle regular text
-        const textElements = element.querySelectorAll(".text-muted-foreground");
-        textElements.forEach((el) => {
-          if (el instanceof HTMLElement) {
-            el.style.fontFamily = "'Geist', sans-serif";
-            el.style.color = currentTheme?.colors["muted-foreground"];
-          }
-        });
-
-        Array.from(element.children).forEach((child) => {
-          if (child instanceof HTMLElement) cleanup(child);
-        });
-      };
-
-      cleanup(clone);
-
-      // Container styling
-      Object.assign(container.style, {
-        padding: "48px",
-        backgroundColor: currentTheme?.colors.background,
-        border: `2px solid ${currentTheme?.colors.border}`,
-        borderRadius: "16px",
-        maxWidth: "1200px",
-        margin: "0 auto",
-        fontFamily: "'Geist', sans-serif",
-      });
-
-      container.appendChild(clone);
-      document.body.appendChild(container);
-
-      const canvas = await html2canvas(container, {
-        backgroundColor: currentTheme?.colors.background,
-        useCORS: true,
-        scale: 2,
-        logging: false,
-        allowTaint: true,
-        imageTimeout: 0,
-        onclone: (doc) => {
-          const styles = document.createElement("style");
-          styles.textContent = `
-            * { font-family: 'Geist', sans-serif !important; }
-            .font-mono, .text-primary { 
-              font-family: 'Geist Mono', monospace !important;
-              font-weight: 700 !important;
-            }
-            .text-muted-foreground { 
-              font-family: 'Geist', sans-serif !important;
-              color: ${currentTheme?.colors["muted-foreground"]} !important;
-            }
-            .card {
-              background-color: ${currentTheme?.colors.card} !important;
-              border: 2px solid ${currentTheme?.colors.border} !important;
-            }
-          `;
-          doc.head.appendChild(styles);
+      const canvas = await captureResults({
+        element: resultsRef.current,
+        theme: currentTheme,
+        stats: {
+          wpm: lastWPM,
+          accuracy,
         },
       });
 
-      // Add watermark with proper fonts
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        const padding = 40;
-        const watermarkY = canvas.height - padding;
-
-        // Draw logo and brand at bottom right
-        const brandText = "cattype";
-        ctx.font = "600 20px 'Geist'";
-        const brandWidth = ctx.measureText(brandText).width;
-        const logoSize = 24;
-        const totalWidth = logoSize + 8 + brandWidth;
-        const logoX = canvas.width - padding - totalWidth;
-
-        // Draw text first for clean positioning
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = currentTheme?.colors["muted-foreground"];
-        ctx.textAlign = "left";
-
-        // Draw stats on bottom left
-        ctx.font = "500 14px 'Geist'";
-        ctx.fillText(
-          `${Math.round(lastWPM)} WPM · ${Math.round(stats.accuracy)}% ACC`,
-          padding,
-          watermarkY
-        );
-
-        // Draw brand text and logo on bottom right
-
-        // Draw brand text and logo on bottom right
-        if (logoImg) {
-          ctx.save();
-          if (theme !== "classic-light") {
-            ctx.filter = "invert(1)";
-          }
-          ctx.drawImage(logoImg, logoX, watermarkY, logoSize, logoSize);
-          ctx.restore();
-
-          ctx.font = "600 20px 'Geist'";
-          ctx.fillText(brandText, logoX + logoSize + 8, watermarkY);
-        } else {
-          // Fallback to just text if logo fails
-          ctx.font = "600 20px 'Geist'";
-          ctx.textAlign = "right";
-          ctx.fillText(brandText, canvas.width - padding, watermarkY);
-        }
-      }
-
-      // Cleanup
-      document.body.removeChild(container);
-      document.head.removeChild(style);
-      return canvas;
-    } catch (error) {
-      console.error("Capture failed:", error);
-      toast.error("Failed to capture results");
-      return null;
-    } finally {
-      setIsExporting(false);
-    }
-  };
-
-  const handleDownload = async () => {
-    try {
-      setIsExporting(true);
-      const canvas = await captureResults();
       if (!canvas) return;
 
       const timestamp = new Date().toISOString().split("T")[0];
