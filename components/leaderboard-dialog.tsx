@@ -41,6 +41,7 @@ export function LeaderboardDialog() {
   const [language, setLanguage] = useState<string>("all");
   const [snippetId, setSnippetId] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const languages = Array.from(new Set(codeSnippets.map(s => s.language)));
 
@@ -64,11 +65,13 @@ export function LeaderboardDialog() {
   };
 
   useEffect(() => {
-    fetchResults();
-  }, [language, snippetId]);
+    if (open) {
+      fetchResults();
+    }
+  }, [open, language, snippetId]);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
           <Trophy className="h-5 w-5" />

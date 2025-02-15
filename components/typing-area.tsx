@@ -120,6 +120,28 @@ export function TypingArea({
     }
   }, [cursorPosition]);
 
+  // Add effect to handle focus when typing starts
+  useEffect(() => {
+    if (hasStartedTyping) {
+      // Remove focus from all other focusable elements
+      document.querySelectorAll('button, [tabindex="0"]').forEach(element => {
+        if (element !== containerRef.current) {
+          (element as HTMLElement).setAttribute('tabindex', '-1');
+        }
+      });
+
+      // Ensure typing area stays focused
+      containerRef.current?.focus();
+    }
+
+    // Cleanup function to restore focusability when component unmounts
+    return () => {
+      document.querySelectorAll('[tabindex="-1"]').forEach(element => {
+        element.setAttribute('tabindex', '0');
+      });
+    };
+  }, [hasStartedTyping]);
+
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (timeLeft === 0) return;
 
