@@ -90,3 +90,18 @@ model TypingResult {
 
   @@map("typing_result")
 }
+
+model SharedResult {
+  id          String   @id @default(cuid())
+  snippetId   String
+  language    String
+  wpm         Float
+  raw         Float
+  accuracy    Float
+  time        Float
+  characters  Json
+  testType    String
+  sharedAt    DateTime @default(now())
+
+  @@map("shared_result")
+}
