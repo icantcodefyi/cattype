@@ -1,9 +1,8 @@
 import { ImageResponse } from '@vercel/og';
-import { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     return new ImageResponse(
       (
@@ -79,8 +78,8 @@ export async function GET(req: NextRequest) {
         height: 630,
       }
     );
-  } catch (e: any) {
-    console.log(`${e.message}`);
+  } catch (e) {
+    console.log(`${e}`);
     return new Response(`Failed to generate the image`, {
       status: 500,
     });
