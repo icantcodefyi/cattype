@@ -24,7 +24,7 @@ export function ThemeSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="fixed bottom-14 right-16">
+        <Button variant="outline" size="icon" className="fixed bottom-14 right-16" aria-label="Change theme">
           <Palette className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">Toggle theme</span>
         </Button>

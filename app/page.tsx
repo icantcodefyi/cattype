@@ -161,6 +161,7 @@ function MainContent() {
                 size="icon"
                 className="shadow-none border-none"
                 title="Reset the test"
+                aria-label="Reset typing test"
               >
                 <RotateCcw className="w-5 h-5 transition-transform hover:-rotate-90" />
               </Button>

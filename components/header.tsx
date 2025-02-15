@@ -45,7 +45,7 @@ export function Header() {
               href="https://github.com/icantcodefyi/cattype"
               target="_blank"
             >
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" aria-label="View on GitHub">
                 <GithubIcon className="h-5 w-5" />
                 <span className="sr-only">Github</span>
               </Button>
