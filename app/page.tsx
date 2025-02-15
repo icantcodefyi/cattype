@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { TypingArea } from "@/components/typing-area";
 import { SnippetSelector } from "@/components/snippet-selector";
-import { codeSnippets } from "@/lib/code-snippets";
+import { codeSnippets, getRandomSnippet } from "@/lib/code-snippets";
 import type { CodeSnippet } from "@/lib/code-snippets";
 import { ThemeProvider } from "@/components/theme-provider";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -29,7 +29,10 @@ function MainContent() {
   const [showFocusWarning, setShowFocusWarning] = useState(true);
   const [selectedSnippet, setSelectedSnippet] = useState(() => {
     const snippetId = searchParams.get("snippet");
-    return codeSnippets.find((s) => s.id === snippetId) || codeSnippets[0];
+    if (snippetId) {
+      return codeSnippets.find((s) => s.id === snippetId) || getRandomSnippet();
+    }
+    return getRandomSnippet();
   });
 
   const {
