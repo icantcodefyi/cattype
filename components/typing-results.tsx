@@ -78,6 +78,20 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   return null;
 };
 
+// Helper function for logo loading with absolute URL
+const loadLogo = () =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new window.Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = (e) => {
+      console.error("Logo load error:", e);
+      reject(new Error("Failed to load logo"));
+    };
+    // Use absolute URL to prevent path issues
+    img.src = window.location.origin + "/logo.svg";
+  });
+
 export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
   const stats = useTypingStore((state) => state.stats);
   const resetStats = useTypingStore((state) => state.resetStats);
@@ -176,8 +190,32 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
 
     try {
       const currentTheme = themeRegistry.getTheme(theme || "classic-dark");
+
+      // Pre-load logo before starting capture
+      let logoImg;
+      try {
+        const response = await fetch("/logo.svg");
+        if (!response.ok) throw new Error("Logo not found");
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        logoImg = await new Promise<HTMLImageElement>((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+          img.src = url;
+        });
+      } catch (error) {
+        console.warn("Logo loading skipped:", error);
+      }
+
       const container = document.createElement("div");
       const clone = resultsRef.current.cloneNode(true) as HTMLElement;
+
+      // Remove the brand section if it exists
+      const brandSection = clone.querySelector("[data-brand-section]");
+      if (brandSection) {
+        brandSection.remove();
+      }
 
       // Font loading
       const fontCSS = `
@@ -267,47 +305,49 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
       // Add watermark with proper fonts
       const ctx = canvas.getContext("2d");
       if (ctx) {
-        const watermarkY = canvas.height - 30;
-        const padding = 20;
+        const padding = 40;
+        const watermarkY = canvas.height - padding;
 
-        // Draw text first with proper font
-        ctx.textBaseline = "middle";
+        // Draw logo and brand at bottom right
+        const brandText = "cattype";
         ctx.font = "600 20px 'Geist'";
-        ctx.fillStyle = currentTheme?.colors["muted-foreground"];
-
-        // Add logo and text
+        const brandWidth = ctx.measureText(brandText).width;
         const logoSize = 24;
-        const logoX = padding;
+        const totalWidth = logoSize + 8 + brandWidth;
+        const logoX = canvas.width - padding - totalWidth;
 
-        try {
-          const logoImg = await loadLogo();
+        // Draw text first for clean positioning
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = currentTheme?.colors["muted-foreground"];
+        ctx.textAlign = "left";
+
+        // Draw stats on bottom left
+        ctx.font = "500 14px 'Geist'";
+        ctx.fillText(
+          `${Math.round(lastWPM)} WPM · ${Math.round(stats.accuracy)}% ACC`,
+          padding,
+          watermarkY
+        );
+
+        // Draw brand text and logo on bottom right
+
+        // Draw brand text and logo on bottom right
+        if (logoImg) {
           ctx.save();
           if (theme !== "classic-light") {
             ctx.filter = "invert(1)";
           }
-          ctx.drawImage(
-            logoImg,
-            logoX,
-            watermarkY - logoSize / 2,
-            logoSize,
-            logoSize
-          );
+          ctx.drawImage(logoImg, logoX, watermarkY, logoSize, logoSize);
           ctx.restore();
-          ctx.fillText("cattype", logoX + logoSize + 8, watermarkY);
-        } catch (error) {
-          ctx.fillText("cattype", padding, watermarkY);
-        }
 
-        // Stats with proper font
-        ctx.font = "500 14px 'Geist'";
-        ctx.textAlign = "right";
-        ctx.fillText(
-          `${Math.round(lastWPM)} WPM · ${Math.round(stats.accuracy)}% ACC · ${
-            snippet.language
-          }`,
-          canvas.width - padding,
-          watermarkY
-        );
+          ctx.font = "600 20px 'Geist'";
+          ctx.fillText(brandText, logoX + logoSize + 8, watermarkY);
+        } else {
+          // Fallback to just text if logo fails
+          ctx.font = "600 20px 'Geist'";
+          ctx.textAlign = "right";
+          ctx.fillText(brandText, canvas.width - padding, watermarkY);
+        }
       }
 
       // Cleanup
@@ -351,25 +391,17 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-6xl mx-auto p-6 space-y-8" // Increased space-y
+      className="w-full max-w-6xl mx-auto p-6 space-y-8"
     >
       <SettingsDialog
         open={showSettings}
         onOpenChange={setShowSettings}
         showTrigger={false}
       />
-      <div ref={resultsRef} className="space-y-8">
-        {" "}
-        {/* Increased gap */}
+      <div ref={resultsRef} className="space-y-6">
         <div className="flex flex-col md:flex-row gap-8 justify-between">
-          {" "}
-          {/* Increased gap */}
           <div className="flex flex-col gap-4">
-            {" "}
-            {/* Increased gap */}
             <div className="text-5xl font-mono">
-              {" "}
-              {/* Increased font size */}
               <span className="text-primary font-bold">{lastWPM}</span>
               <span className="text-muted-foreground text-2xl ml-3">wpm</span>
             </div>
@@ -381,11 +413,7 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {" "}
-            {/* Increased gap */}
             <Card className="border-2">
-              {" "}
-              {/* Added stronger border */}
               <CardHeader className="p-4">
                 <CardTitle className="text-sm font-normal text-muted-foreground">
                   test type
@@ -403,8 +431,6 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
               </CardContent>
             </Card>
             <Card className="border-2">
-              {" "}
-              {/* Added stronger border */}
               <CardHeader className="p-4">
                 <CardTitle className="text-sm font-normal text-muted-foreground">
                   raw
@@ -426,8 +452,6 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
               </CardContent>
             </Card>
             <Card className="border-2">
-              {" "}
-              {/* Added stronger border */}
               <CardHeader className="p-4">
                 <CardTitle className="text-sm font-normal text-muted-foreground">
                   characters
@@ -449,8 +473,6 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
               </CardContent>
             </Card>
             <Card className="border-2">
-              {" "}
-              {/* Added stronger border */}
               <CardHeader className="p-4">
                 <CardTitle className="text-sm font-normal text-muted-foreground">
                   time
@@ -474,14 +496,8 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
           </div>
         </div>
         <Card className="w-full overflow-hidden bg-card/50 border-2">
-          {" "}
-          {/* Added stronger border */}
           <CardContent className="p-8">
-            {" "}
-            {/* Increased padding */}
             <div className="h-[350px] w-full">
-              {" "}
-              {/* Increased height */}
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart
                   data={chartData}
@@ -600,8 +616,6 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
       </div>
 
       <div className="flex justify-center gap-4 pt-4">
-        {" "}
-        {/* Increased gap and added top padding */}
         <TooltipProvider>
           <UITooltip>
             <TooltipTrigger asChild>
@@ -668,13 +682,3 @@ export function TypingResults({ onRestart, snippet }: TypingResultsProps) {
     </motion.div>
   );
 }
-
-// Helper function for logo loading
-const loadLogo = () =>
-  new Promise<HTMLImageElement>((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error("Failed to load logo"));
-    img.src = "/logo.svg";
-  });
