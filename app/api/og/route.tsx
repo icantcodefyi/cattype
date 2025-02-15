@@ -26,19 +26,13 @@ export async function GET() {
               marginBottom: '20px',
             }}
           >
-            <svg
+            <img
+              src="/logo.svg"
               width="48"
               height="48"
-              viewBox="0 0 24 24"
-              fill="none"
               style={{ marginRight: '12px' }}
-            >
-              <path
-                d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14C21 18.9706 16.9706 23 12 23C7.02944 23 3 18.9706 3 14Z"
-                fill="#A855F7"
-              />
-              <circle cx="12" cy="12" r="3" fill="white" />
-            </svg>
+              alt="CatType Logo"
+            />
             <span
               style={{
                 fontSize: 48,
@@ -59,17 +53,7 @@ export async function GET() {
               marginTop: '10px',
             }}
           >
-            The Ultimate Typing Practice App
-          </div>
-          <div
-            style={{
-              fontSize: 20,
-              color: '#9CA3AF',
-              textAlign: 'center',
-              marginTop: '10px',
-            }}
-          >
-            Improve your typing speed with fun and interactive exercises
+            The Developer&apos;s Typing Game
           </div>
         </div>
       ),
