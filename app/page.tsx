@@ -21,6 +21,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { FocusWarning } from "@/components/focus-warning";
+import { Header } from "@/components/header";
 
 function MainContent() {
   const router = useRouter();
@@ -102,79 +103,79 @@ function MainContent() {
 
   if (isMobile) {
     return (
-      <div className="flex items-center h-[calc(100vh-56px)] justify-center bg-background p-4 text-center text-foreground">
-        <MobileCatView />
-      </div>
+      <>
+        <Header onRestart={handleRestart} />
+        <div className="flex items-center h-[calc(100vh-56px)] justify-center bg-background p-4 text-center text-foreground">
+          <MobileCatView />
+        </div>
+      </>
     );
   }
 
   if (stats.isComplete) {
     return (
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-56px)] bg-background text-foreground">
-        <TypingResults onRestart={handleRestart} snippet={selectedSnippet} />
-        <ThemeSwitcher />
-      </div>
+      <>
+        <Header onRestart={handleRestart} />
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-56px)] bg-background text-foreground">
+          <TypingResults onRestart={handleRestart} snippet={selectedSnippet} />
+          <ThemeSwitcher />
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-[calc(100vh-56px)] bg-background text-foreground">
-      <div className="w-full max-w-3xl mx-auto px-4">
-        <div className="relative">
-          <div className="text-center mb-8">
+    <>
+      <Header onRestart={handleRestart} />
+      <div className="flex flex-col items-center justify-center h-[calc(100vh-56px)] bg-background text-foreground">
+        <div className="w-full max-w-3xl mx-auto px-4">
+          <div className="relative">
+            <div className="text-center mb-8">
+              <SnippetSelector
+                selectedSnippet={selectedSnippet}
+                onSnippetChange={handleSnippetChange}
+              />
+            </div>
+
+            <TypingArea
+              snippet={selectedSnippet}
+              timeLeft={timeLeft}
+              onType={handleTyping}
+              cursorPosition={cursorPosition}
+              setCursorPosition={setCursorPosition}
+              currentText={currentText}
+            />
+
+            <FocusWarning
+              isVisible={!isAreaFocused && showFocusWarning}
+              onClick={handleFocusWarningClick}
+            />
+          </div>
+
+          <div className="flex justify-center mt-8">
             <Tooltip>
               <TooltipTrigger asChild>
-                <div>
-                  <SnippetSelector
-                    selectedSnippet={selectedSnippet}
-                    onSnippetChange={handleSnippetChange}
-                  />
-                </div>
+                <Button
+                  onClick={handleRestart}
+                  variant="outline"
+                  size="icon"
+                  className="shadow-none border-none"
+                  title="Reset the test"
+                  aria-label="Reset typing test"
+                >
+                  <RotateCcw className="w-5 h-5 transition-transform hover:-rotate-90" />
+                </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Click to select a different code snippet</p>
+                <p>Reset the typing test</p>
               </TooltipContent>
             </Tooltip>
           </div>
 
-          <TypingArea
-            snippet={selectedSnippet}
-            timeLeft={timeLeft}
-            onType={handleTyping}
-            cursorPosition={cursorPosition}
-            setCursorPosition={setCursorPosition}
-            currentText={currentText}
-          />
-
-          <FocusWarning
-            isVisible={!isAreaFocused && showFocusWarning}
-            onClick={handleFocusWarningClick}
-          />
+          <ThemeSwitcher />
         </div>
-
-        <div className="flex justify-center mt-8">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={handleRestart}
-                variant="outline"
-                size="icon"
-                className="shadow-none border-none"
-                title="Reset the test"
-                aria-label="Reset typing test"
-              >
-                <RotateCcw className="w-5 h-5 transition-transform hover:-rotate-90" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Reset the typing test</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
-
-        <ThemeSwitcher />
       </div>
-    </div>
+    </>
   );
 }
 

@@ -6,6 +6,14 @@ export type CodeSnippet = {
   difficulty: 'easy' | 'medium' | 'hard';
 };
 
+const catParagraphs = [
+  "In the bustling city of Whiskertown, there lived a remarkable cat named Luna who had mastered the art of typing. Every evening, she would sit at her owner's computer, her paws dancing gracefully across the keyboard as she composed poetry about her daily adventures. Other cats in the neighborhood would gather by the window, watching in amazement as Luna's stories came to life on the screen.",
+  "The Cat Cafe on Purrington Street was famous for its unique approach to customer service. Each table had its own feline typing assistant who would take orders by tapping on specially designed keyboards. The café's star employee, a ginger cat named Oliver, could type sixty words per minute and never missed an order. Customers would travel from far and wide just to watch him work.",
+  "Professor Whiskers was known throughout the university for her innovative teaching methods. Instead of traditional lectures, she taught her students the art of quick and accurate typing through a series of playful exercises. Her classroom was filled with the gentle sound of keyboards clicking as students practiced their skills, inspired by her tales of ancient cats who communicated through elaborate paw movements.",
+  "The annual Feline Typing Championship was the most anticipated event in Pawsville. Cats from all corners of the world would gather to showcase their typing prowess, their paws flying across keyboards with incredible speed and precision. This year's favorite was a sleek Siamese named Jazz, who had developed a unique technique involving both paws and tail for maximum efficiency.",
+  "Deep in Silicon Valley, a team of tech-savvy cats had developed a revolutionary keyboard designed specifically for feline users. The prototype, tested by a diverse group of cats, featured cushioned keys and ergonomic paw rests. Early results were promising, with test subjects reporting increased typing speeds and decreased paw fatigue. The future of feline typing had never looked brighter."
+];
+
 export const codeSnippets: CodeSnippet[] = [
   {
     id: 'js-fibonacci',
@@ -34,5 +42,12 @@ export const codeSnippets: CodeSnippet[] = [
     name: 'Decorator Pattern',
     difficulty: 'hard',
     code: 'def timer_decorator(func):\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f"{func.__name__} took {end-start} seconds")\n        return result\n    return wrapper'
-  }
+  },
+  {
+    id: 'text-random',
+    language: 'Text',
+    name: 'Random Story',
+    difficulty: 'medium',
+    code: catParagraphs[Math.floor(Math.random() * catParagraphs.length)]
+  },
 ]; 

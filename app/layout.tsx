@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Header } from "@/components/header";
 import { SessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
@@ -90,7 +89,6 @@ export default function RootLayout({
         <SessionProvider>
           <TooltipProvider delayDuration={300}>
             <Toaster />
-            <Header />
             {children}
           </TooltipProvider>
         </SessionProvider>

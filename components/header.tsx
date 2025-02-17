@@ -10,7 +10,11 @@ import { SettingsDialog } from "./settings-dialog";
 import { LeaderboardDialog } from "./leaderboard-dialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export function Header() {
+interface HeaderProps {
+  onRestart: () => void;
+}
+
+export function Header({ onRestart }: HeaderProps) {
   const { currentTheme } = useTypingStore();
   const shouldInvert = currentTheme !== "classic-light";
   const isMobile = useIsMobile();
@@ -18,22 +22,20 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center justify-between">
-        <Link href="/">
-          <div className="mr-4 pt-4 flex items-center">
-            <Image
-              src="/logo.svg"
-              alt="CatType Logo"
-              width={isMobile ? 60 : 80}
-              height={isMobile ? 60 : 80}
-              className={shouldInvert ? "invert" : ""}
-            />
-            {!isMobile && (
-              <span className={`text-2xl font-medium text-black monaco-font ${shouldInvert ? "text-white" : ""}`}>
-                cattype_
-              </span>
-            )}
-          </div>
-        </Link>
+        <button onClick={onRestart} className="mr-4 pt-4 flex items-center">
+          <Image
+            src="/logo.svg"
+            alt="CatType Logo"
+            width={isMobile ? 60 : 80}
+            height={isMobile ? 60 : 80}
+            className={shouldInvert ? "invert" : ""}
+          />
+          {!isMobile && (
+            <span className={`text-2xl font-medium text-black monaco-font ${shouldInvert ? "text-white" : ""}`}>
+              cattype_
+            </span>
+          )}
+        </button>
         {isMobile ? (
           <div className="flex items-center">
             <InfoDialog />
