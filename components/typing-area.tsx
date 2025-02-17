@@ -191,12 +191,13 @@ export function TypingArea({
       const expectedChar = targetText[cursorPosition];
       const isCorrect = e.key === expectedChar;
       
+      // ? No matter if the character is correct or not, it should be inserted
+      const newText = currentValue.slice(0, cursorPosition) + e.key + currentValue.slice(cursorPosition);
+      onType(newText);
+      setCursorPosition(cursorPosition + 1);
+
       if (isCorrect) {
         if (settings.soundEffects) playKeyPress();
-        const newText = currentValue.slice(0, cursorPosition) + e.key + currentValue.slice(cursorPosition);
-        onType(newText);
-        setCursorPosition(cursorPosition + 1);
-
         // Check if this was the last character
         if (newText === targetText) {
           calculateAndUpdateStats();
