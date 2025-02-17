@@ -10,6 +10,12 @@ import {
 import { CodeSnippet, codeSnippets } from "@/lib/code-snippets";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 interface SnippetSelectorProps {
   selectedSnippet: CodeSnippet;
   onSnippetChange: (snippet: CodeSnippet) => void;
@@ -37,13 +43,20 @@ export function SnippetSelector({
           if (snippet) onSnippetChange(snippet);
         }}
       >
-        <SelectTrigger className="flex justify-center items-center border-none shadow-none focus:ring-0 hover:bg-transparent [&>svg]:hidden">
-          <SelectValue>
-            <span className="text-md font-semibold">
-              {selectedSnippet.language}
-            </span>
-          </SelectValue>
-        </SelectTrigger>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <SelectTrigger className="flex justify-center items-center border-none shadow-none focus:ring-0 hover:bg-transparent [&>svg]:hidden">
+              <SelectValue>
+                <span className="text-md font-semibold">
+                  {selectedSnippet.language}
+                </span>
+              </SelectValue>
+            </SelectTrigger>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Click to select a different code snippet</p>
+          </TooltipContent>
+        </Tooltip>
         <SelectContent
           position="popper"
           className="w-[280px] shadow-md"
@@ -75,9 +88,9 @@ export function SnippetSelector({
             href="https://github.com/icantcodefyi/cattype?tab=readme-ov-file#adding-new-code-snippets"
             target="_blank"
           >
-                <div className="relative flex w-full cursor-default select-none items-center hover:bg-accent hover:text-accent-foreground rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-                  <span>Add your own snippets</span>
-                </div>
+            <div className="relative flex w-full cursor-default select-none items-center hover:bg-accent hover:text-accent-foreground rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              <span>Add your own snippets</span>
+            </div>
           </Link>
         </SelectContent>
       </Select>
