@@ -55,22 +55,22 @@ export const codeSnippets: CodeSnippet[] = [
     language: 'C++',
     name: 'Bubble Sort',
     difficulty: 'medium',
-    code: 'void bubbleSort(vector<int>& nums) {\n	int n = nums.size();\n	for (int i = 0; i < n - 1; i++) {\n		for (int j = 0; j < n - i - 1; j++) {\n			if (v[j] > v[j + 1]){\n				swap(v[j], v[j + 1]);\n			}\n		}\n	}\n}'
+    code: 'void bubbleSort(vector<int>& nums) {\n    int n = nums.size();\n    for (int i = 0; i < n - 1; i++) {\n        for (int j = 0; j < n - i - 1; j++) {\n            if (v[j] > v[j + 1]){\n                swap(v[j], v[j + 1]);\n            }\n        }\n    }\n}'
   },
   {
 	id : 'isPalindrome',
 	language: 'C++',
 	name: 'Check for Palindrome',
-	difficulty: 'easy',
-	code : 'string isPalindrome(string str){\n	string rev = s;\n	reverse(rev.begin(), rev.end());\n	if (str == rev) {\n		cout << str << " is Palindrome";\n	}\n	else {\n		cout << str << " is not a Palindrome";\n	}\n}'
+	difficulty: 'medium',
+	code : 'string isPalindrome(string str){\n    string rev = s;\n    reverse(rev.begin(), rev.end());\n    if (str == rev) {\n        cout << str << " is Palindrome";\n    }\n    else {\n        cout << str << " is not a Palindrome";\n    }\n}'
   },
 
   {
 	id : 'binary-search',
 	language : 'C++',
 	name : 'Binary Search',
-	difficulty : 'medium',
-	code : 'int BinarySearch(int nums[], int k) {\n	int n = nums.size();\n	int high = nums[0];\n	int low = nums[n-1];\n	while (high >= low){\n		int mid = (low+mid)/2;\n		if(nums[mid] == x){\n			return arr[mid];\n		}\n		if else (x > nums[mid]) {\n			low = mid+1;\n		}/n		else{\n			high = mid-1;\n		}\n	}\n	return -1;\n}'
+	difficulty : 'hard',
+	code : 'int BinarySearch(int nums[], int k) {\n    int n = nums.size();\n    int high = nums[0];\n    int low = nums[n-1];\n    while (high >= low){\n        int mid = (low+mid)/2;\n        if(nums[mid] == x)  {\n            return arr[mid];\n        }\n        else if (x > nums[mid]) {\n            low = mid+1;\n        }\n        else {\n            high = mid-1;\n        }\n    }\n    return -1;\n}'
   }
 
 ]; 
