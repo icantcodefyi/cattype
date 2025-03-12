@@ -152,6 +152,36 @@ export const defaultThemes: { theme: Theme; category: string }[] = [
     },
     category: "Dark"
   },
+  {
+    theme: {
+      name: "Midnight Ocean",
+      id: "midnight-ocean",
+      author: "Buddhsen",
+      description: "Deep ocean-inspired dark theme with subtle blue accents",
+      colors: {
+        background: "#0A192F",
+        foreground: "#E6F1FF",
+        card: "#0A192F",
+        "card-foreground": "#E6F1FF",
+        popover: "#0A192F",
+        "popover-foreground": "#E6F1FF",
+        primary: "#64FFDA",
+        "primary-foreground": "#0A192F",
+        secondary: "#112240",
+        "secondary-foreground": "#64FFDA",
+        muted: "#112240",
+        "muted-foreground": "#8892B0",
+        accent: "#112240",
+        "accent-foreground": "#64FFDA",
+        destructive: "#FF5470",
+        "destructive-foreground": "#ffffff",
+        border: "#112240",
+        input: "#112240",
+        ring: "#64FFDA"
+      }
+    },
+    category: "Dark"
+  },
   // Light Themes
   {
     theme: {
@@ -240,6 +270,36 @@ export const defaultThemes: { theme: Theme; category: string }[] = [
         border: "#1a231e",
         input: "#1a231e",
         ring: "#4ca771"
+      }
+    },
+    category: "Special"
+  },
+  {
+    theme: {
+      name: "Nebula",
+      id: "nebula",
+      author: "Buddhsen",
+      description: "Deep space nebula with cosmic auroras theme",
+      colors: {
+        background: "#0B1026",         
+        foreground: "#E4F1FF",         
+        card: "#0B1026",
+        "card-foreground": "#E4F1FF",
+        popover: "#0B1026",
+        "popover-foreground": "#E4F1FF",
+        primary: "#64E6FF",             
+        "primary-foreground": "#0B1026",
+        secondary: "#162040",           
+        "secondary-foreground": "#64E6FF",
+        muted: "#162040",
+        "muted-foreground": "#7B8EBE",  
+        accent: "#162040",
+        "accent-foreground": "#FF61D8", 
+        destructive: "#FF3D71",        
+        "destructive-foreground": "#ffffff",
+        border: "#162040",
+        input: "#162040",
+        ring: "#64E6FF"
       }
     },
     category: "Special"
